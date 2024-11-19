@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quebra-Cabeça de Coração</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #heart {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+            clip-path: polygon(50% 0%, 100% 40%, 80% 100%, 50% 80%, 20% 100%, 0% 40%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #missing-piece {
+            position: absolute;
+            top: 60px;
+            left: 80px;
+            width: 40px;
+            height: 40px;
+            background-color: #f0f0f0;
+            clip-path: polygon(50% 0%, 100% 40%, 80% 100%, 50% 80%, 20% 100%, 0% 40%);
+        }
+
+        #piece {
+            margin-top: 30px;
+            width: 40px;
+            height: 40px;
+            background-color: pink;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            line-height: 40px;
+            cursor: grab;
+            clip-path: polygon(50% 0%, 100% 40%, 80% 100%, 50% 80%, 20% 100%, 0% 40%);
+        }
+
+        #piece.dragging {
+            opacity: 0.7;
+            cursor: grabbing;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="heart">
+        <div id="missing-piece"></div>
+    </div>
+    <div id="piece" draggable="true">YOU</div>
+
+    <script>
+        const piece = document.getElementById('piece');
+        const heart = document.getElementById('heart');
+        const missingPiece = document.getElementById('missing-piece');
+
+        piece.addEventListener('dragstart', (e) => {
+            piece.classList.add('dragging');
+            e.dataTransfer.setData('text', 'you');
+        });
+
+        piece.addEventListener('dragend', () => {
+            piece.classList.remove('dragging');
+        });
+
+        heart.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        heart.addEventListener('drop', (e) => {
+            const data = e.dataTransfer.getData('text');
+            if (data === 'you') {
+                missingPiece.classList.add('hidden');
+                heart.style.backgroundColor = 'red';
+                piece.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
